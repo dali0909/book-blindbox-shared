@@ -9,6 +9,7 @@ const ROOT = path.resolve(process.cwd());
 const PUBLIC_DIR = path.join(ROOT, "public");
 const DB_PATH = process.env.DB_PATH || path.join(ROOT, "data", "blindbox.sqlite");
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
+const PUBLIC_EDIT = String(process.env.PUBLIC_EDIT || "").toLowerCase() === "true";
 
 function ensureDir(p) {
   fs.mkdirSync(p, { recursive: true });
@@ -52,6 +53,7 @@ function json(res, code, body) {
 }
 
 function requireAdmin(req, res, next) {
+  if (PUBLIC_EDIT) return next();
   if (!ADMIN_TOKEN) return json(res, 500, { ok: false, error: "ADMIN_TOKEN not configured" });
   const header = String(req.headers.authorization || "");
   const token = header.startsWith("Bearer ") ? header.slice("Bearer ".length) : "";
@@ -87,7 +89,7 @@ app.disable("x-powered-by");
 app.use(express.json({ limit: "650kb" }));
 
 app.get("/api/health", (req, res) => {
-  json(res, 200, { ok: true });
+  json(res, 200, { ok: true, publicEdit: PUBLIC_EDIT });
 });
 
 app.get("/api/books", (req, res) => {

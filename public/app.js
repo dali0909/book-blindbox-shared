@@ -4,6 +4,7 @@ const PILE_SEED_KEY = "blindbox.pileSeed.v1";
 const ADMIN_TOKEN_KEY = "blindbox.adminToken.v1";
 
 let SERVER_MODE = false;
+let PUBLIC_EDIT_MODE = false;
 
 const GIFT_THEMES = [
   {
@@ -67,6 +68,8 @@ async function detectServerMode() {
   const timer = window.setTimeout(() => controller.abort(), 900);
   try {
     const res = await fetch("./api/health", { signal: controller.signal, cache: "no-store" });
+    const data = await res.json().catch(() => ({}));
+    PUBLIC_EDIT_MODE = Boolean(data?.publicEdit);
     return res.ok;
   } catch {
     return false;
@@ -660,7 +663,7 @@ async function initLibraryPage() {
   let editClearCover = false;
 
   function isAdmin() {
-    return SERVER_MODE && Boolean(getAdminToken());
+    return SERVER_MODE && (PUBLIC_EDIT_MODE || Boolean(getAdminToken()));
   }
 
   function updateAdminUI(message = "") {
@@ -669,7 +672,9 @@ async function initLibraryPage() {
       return;
     }
     const ok = isAdmin();
-    adminStatus.textContent = ok ? `共享模式：已解锁管理` : `共享模式：只读（需要 Admin Token）${message ? "· " + message : ""}`;
+    adminStatus.textContent = PUBLIC_EDIT_MODE
+      ? "共享模式：公开编辑已开启"
+      : ok ? "共享模式：已解锁管理" : `共享模式：只读（需要 Admin Token）${message ? "· " + message : ""}`;
     // Disable write actions when not admin.
     form.querySelectorAll("input,textarea,button").forEach((el) => {
       if (el.id === "adminToken" || el.id === "btnAdminSave" || el.id === "btnAdminSync") return;
@@ -714,7 +719,7 @@ async function initLibraryPage() {
     `;
 
     const sorted = [...books].sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
-    const canWrite = !SERVER_MODE || Boolean(getAdminToken());
+    const canWrite = !SERVER_MODE || PUBLIC_EDIT_MODE || Boolean(getAdminToken());
     if (!sorted.length) {
       list.innerHTML = `<p class="panel__hint">书库是空的。先添加几本想读的书。</p>`;
       return;

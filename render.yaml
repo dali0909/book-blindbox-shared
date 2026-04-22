@@ -7,5 +7,7 @@ services:
     startCommand: npm start
     autoDeploy: true
     envVars:
+      - key: PUBLIC_EDIT
+        value: true
       - key: ADMIN_TOKEN
         sync: false
