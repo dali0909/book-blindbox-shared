@@ -9,7 +9,7 @@ const ROOT = path.resolve(process.cwd());
 const PUBLIC_DIR = path.join(ROOT, "public");
 const DB_PATH = process.env.DB_PATH || path.join(ROOT, "data", "blindbox.sqlite");
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
-const PUBLIC_EDIT = String(process.env.PUBLIC_EDIT || "").toLowerCase() === "true";
+const PUBLIC_EDIT = String(process.env.PUBLIC_EDIT || "true").toLowerCase() !== "false";
 
 function ensureDir(p) {
   fs.mkdirSync(p, { recursive: true });
