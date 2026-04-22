@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Blindbox · 拆书盲盒</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body data-page="unbox">
+    <div class="wrap">
+      <header class="topbar">
+        <div class="brand">
+          <h1 class="brand__title">Book Blindbox</h1>
+          <div class="brand__subtitle">暗金礼盒 · 拆到就读</div>
+        </div>
+        <nav class="nav" aria-label="导航">
+          <a href="./index.html" data-page="unbox" aria-current="page">拆盒</a>
+          <a href="./library.html" data-page="library" aria-current="false">书库</a>
+          <a href="./history.html" data-page="history" aria-current="false">记录</a>
+        </nav>
+      </header>
+
+      <div class="grid grid--2" style="margin-top:18px">
+        <main class="panel">
+          <h2 class="panel__title">看一本有一本的欢喜</h2>
+          <p class="panel__hint">这里有很多个礼物盒：每个盒子里都是一本不同的书。选一个你最想拆的盒子。</p>
+
+          <div id="pool" class="pool" aria-label="盲盒池"></div>
+
+          <div id="noBooks" class="panel hidden" style="margin-top:14px">
+            <h3 class="panel__title" style="font-size:16px">盒子空了</h3>
+            <p class="panel__hint">去书库添加几本想读的书，然后回来拆。</p>
+            <div class="btnrow">
+              <button id="btnToLibrary" class="btn btn--gold">去添加</button>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+          <div class="btnrow">
+            <button id="btnUnboxRandom" class="btn btn--gold">闭眼拆一个</button>
+            <a class="btn btn--goldline" href="./library.html" style="text-decoration:none">打开书库</a>
+          </div>
+          <p class="footnote">提示：点击任意礼物盒即可开箱揭晓；“闭眼拆一个”会从池子里随机挑一个盒子。</p>
+        </main>
+
+        <aside class="panel">
+          <h2 class="panel__title">正在读</h2>
+          <div id="nowReading"></div>
+          <div class="sep"></div>
+          <p class="panel__hint">你可以把“完成 / 放回”当作封蜡动作：盖上章，就把故事封存进你的时间线。</p>
+        </aside>
+      </div>
+    </div>
+
+    <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="开箱揭晓">
+      <div class="overlay__backdrop" data-close="1"></div>
+      <div class="overlay__panel">
+        <div class="stage stage--overlay">
+          <div class="spotlight" aria-hidden="true"></div>
+          <div class="shadow-ellipse" aria-hidden="true"></div>
+
+          <div id="gift" class="gift gift--idle" role="button" tabindex="0" aria-label="开箱">
+            <div class="gift__lid"></div>
+            <div class="gift__base"></div>
+            <div class="gift__seal" aria-hidden="true"></div>
+            <div class="gift__sparkles" aria-hidden="true"></div>
+          </div>
+
+          <div id="reveal" class="reveal hidden" aria-live="polite">
+            <div class="card">
+              <div class="card__inner">
+                <div class="cover" id="revealCover" aria-hidden="true"></div>
+                <div class="meta">
+                  <h2 id="revealTitle">—</h2>
+                  <p class="author" id="revealAuthor">—</p>
+                  <p class="note" id="revealNote">—</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="btnrow" style="justify-content:center; margin-top:2px">
+              <button id="btnChoose" class="btn btn--gold" disabled>我就读它</button>
+              <button id="btnPutBack" class="btn btn--goldline" disabled>放回池子</button>
+              <button id="btnEdit" class="btn btn--goldline">编辑这本</button>
+              <button id="btnClose" class="btn btn--goldline">收起</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

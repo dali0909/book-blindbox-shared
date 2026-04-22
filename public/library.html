@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Blindbox · 书库</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body data-page="library">
+    <div class="wrap">
+      <header class="topbar">
+        <div class="brand">
+          <h1 class="brand__title">Book Blindbox</h1>
+          <div class="brand__subtitle">书库 · 把想读的书丢进去</div>
+        </div>
+        <nav class="nav" aria-label="导航">
+          <a href="./index.html" data-page="unbox" aria-current="false">拆盒</a>
+          <a href="./library.html" data-page="library" aria-current="page">书库</a>
+          <a href="./history.html" data-page="history" aria-current="false">记录</a>
+        </nav>
+      </header>
+
+      <div class="grid grid--2" style="margin-top:18px">
+        <main class="panel">
+          <h2 class="panel__title">添加一本</h2>
+          <p class="panel__hint">最少只填书名。你也可以写一句“为什么想读”，让拆盒更命中。</p>
+
+          <div class="item" style="margin-bottom:12px">
+            <div>
+              <p class="item__title">共享书库（后端）</p>
+              <p id="adminStatus" class="item__sub">检测中…</p>
+            </div>
+            <div style="min-width:240px">
+              <div class="field" style="margin:0">
+                <div class="label">Admin Token</div>
+                <input id="adminToken" placeholder="仅你自己填写（会存在本浏览器会话里）" />
+              </div>
+              <div class="btnrow" style="justify-content:flex-end">
+                <button id="btnAdminSave" class="btn btn--goldline" type="button">保存口令</button>
+                <button id="btnAdminSync" class="btn btn--goldline" type="button">同步</button>
+              </div>
+            </div>
+          </div>
+
+          <form id="addForm" autocomplete="off">
+            <div class="field">
+              <div class="label">Title</div>
+              <input name="title" placeholder="例如：百年孤独" required />
+            </div>
+            <div class="field">
+              <div class="label">Author (Optional)</div>
+              <input name="author" placeholder="例如：加西亚·马尔克斯" />
+            </div>
+            <div class="field">
+              <div class="label">Why (Optional)</div>
+              <input name="note" placeholder="例如：留给夜色的一本书" />
+            </div>
+            <div class="field">
+              <div class="label">Cover URL (Optional)</div>
+              <input name="coverUrl" placeholder="https://..." />
+            </div>
+            <div class="field">
+              <div class="label">Cover Image (Optional)</div>
+              <input name="coverFile" type="file" accept="image/*" />
+              <div class="filehint">上传图片会保存在浏览器本地（可能占用空间）；封面链接和上传二选一，上传优先。</div>
+            </div>
+            <div class="btnrow">
+              <button class="btn btn--gold" type="submit">加入盒子</button>
+              <a class="btn btn--goldline" href="./index.html" style="text-decoration:none">回去拆盒</a>
+            </div>
+          </form>
+
+          <div class="sep"></div>
+
+          <h2 class="panel__title">批量导入</h2>
+          <p class="panel__hint">每行一本，可写成 <span class="pill">书名 - 作者</span>（作者可省略）。</p>
+          <form id="bulkForm">
+            <div class="field">
+              <div class="label">Bulk</div>
+              <textarea name="bulk" placeholder="The Left Hand of Darkness - Ursula K. Le Guin&#10;百年孤独 - 加西亚·马尔克斯"></textarea>
+            </div>
+            <div class="btnrow">
+              <button class="btn btn--goldline" type="submit">导入</button>
+            </div>
+          </form>
+        </main>
+
+        <aside class="panel">
+          <h2 class="panel__title">我的书库</h2>
+          <div id="stats" class="btnrow" style="gap:10px; margin-bottom:12px"></div>
+          <div id="bookList"></div>
+          <div class="sep"></div>
+          <div class="btnrow">
+            <button id="btnClearBooks" class="btn btn--danger">清空书库</button>
+          </div>
+          <p class="footnote">数据保存在浏览器本地（localStorage）。换设备/清缓存会丢。</p>
+        </aside>
+      </div>
+    </div>
+
+    <div id="editOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="编辑图书">
+      <div class="overlay__backdrop" data-close="1"></div>
+      <div class="overlay__panel">
+        <div class="panel" style="margin:16px; box-shadow:none">
+          <h2 class="panel__title">编辑图书</h2>
+          <p class="panel__hint">替换书名/作者/动机/封面链接。保存后，对应礼物盒内容会同步更新。</p>
+          <form id="editForm" autocomplete="off">
+            <input id="editId" type="hidden" />
+            <div class="field">
+              <div class="label">Title</div>
+              <input id="editTitle" required />
+            </div>
+            <div class="field">
+              <div class="label">Author</div>
+              <input id="editAuthor" />
+            </div>
+            <div class="field">
+              <div class="label">Why</div>
+              <input id="editNote" />
+            </div>
+            <div class="field">
+              <div class="label">Cover URL</div>
+              <input id="editCoverUrl" placeholder="https://..." />
+            </div>
+            <div class="field">
+              <div class="label">Cover Image</div>
+              <input id="editCoverFile" type="file" accept="image/*" />
+              <div class="filehint">选择新图片会覆盖已上传封面；不选则保持不变。</div>
+            </div>
+            <div class="btnrow">
+              <button class="btn btn--gold" type="submit">保存</button>
+              <button id="btnClearCover" class="btn btn--goldline" type="button">清除封面</button>
+              <button id="btnEditClose" class="btn btn--goldline" type="button">取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

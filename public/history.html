@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Blindbox · 记录</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body data-page="history">
+    <div class="wrap">
+      <header class="topbar">
+        <div class="brand">
+          <h1 class="brand__title">Book Blindbox</h1>
+          <div class="brand__subtitle">记录 · 你拆过的夜色</div>
+        </div>
+        <nav class="nav" aria-label="导航">
+          <a href="./index.html" data-page="unbox" aria-current="false">拆盒</a>
+          <a href="./library.html" data-page="library" aria-current="false">书库</a>
+          <a href="./history.html" data-page="history" aria-current="page">记录</a>
+        </nav>
+      </header>
+
+      <div class="grid" style="margin-top:18px">
+        <main class="panel">
+          <h2 class="panel__title">历史时间线</h2>
+          <p class="panel__hint">每一次“选中 / 重抽 / 完成 / 放回”，都会留下封蜡般的痕迹。</p>
+          <div class="btnrow" style="margin-bottom:10px">
+            <button id="btnClearHistory" class="btn btn--danger">清空记录</button>
+            <a class="btn btn--goldline" href="./index.html" style="text-decoration:none">去拆盒</a>
+          </div>
+          <div id="historyList"></div>
+        </main>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
+
