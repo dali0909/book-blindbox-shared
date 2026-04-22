@@ -6,13 +6,6 @@ services:
     buildCommand: npm install
     startCommand: npm start
     autoDeploy: true
-    disk:
-      name: blindbox-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
-      - key: DB_PATH
-        value: /var/data/blindbox.sqlite
       - key: ADMIN_TOKEN
         sync: false
-
