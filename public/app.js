@@ -649,6 +649,7 @@ async function initLibraryPage() {
   const btnAdminSave = document.getElementById("btnAdminSave");
   const btnAdminSync = document.getElementById("btnAdminSync");
   const adminStatus = document.getElementById("adminStatus");
+  const storageFootnote = document.getElementById("storageFootnote");
   const editOverlay = document.getElementById("editOverlay");
   const editBackdrop = editOverlay?.querySelector("[data-close='1']");
   const editForm = document.getElementById("editForm");
@@ -675,6 +676,11 @@ async function initLibraryPage() {
     adminStatus.textContent = PUBLIC_EDIT_MODE
       ? "共享模式：公开编辑已开启"
       : ok ? "共享模式：已解锁管理" : `共享模式：只读（需要 Admin Token）${message ? "· " + message : ""}`;
+    if (storageFootnote) {
+      storageFootnote.textContent = SERVER_MODE
+        ? "书库数据保存在服务器数据库中，刷新页面或换设备后仍会保留。"
+        : "数据保存在浏览器本地（localStorage）。换设备/清缓存会丢。";
+    }
     // Disable write actions when not admin.
     form.querySelectorAll("input,textarea,button").forEach((el) => {
       if (el.id === "adminToken" || el.id === "btnAdminSave" || el.id === "btnAdminSync") return;

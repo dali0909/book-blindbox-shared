@@ -62,7 +62,7 @@
             <div class="field">
               <div class="label">Cover Image (Optional)</div>
               <input name="coverFile" type="file" accept="image/*" />
-              <div class="filehint">上传图片会保存在浏览器本地（可能占用空间）；封面链接和上传二选一，上传优先。</div>
+              <div class="filehint">封面链接和上传二选一，上传优先；共享模式下封面会随图书一起保存。</div>
             </div>
             <div class="btnrow">
               <button class="btn btn--gold" type="submit">加入盒子</button>
@@ -93,7 +93,7 @@
           <div class="btnrow">
             <button id="btnClearBooks" class="btn btn--danger">清空书库</button>
           </div>
-          <p class="footnote">数据保存在浏览器本地（localStorage）。换设备/清缓存会丢。</p>
+          <p id="storageFootnote" class="footnote">正在检测书库保存方式…</p>
         </aside>
       </div>
     </div>
